@@ -1,0 +1,136 @@
+openapi: 3.0.0
+info:
+  title: Everfit Metrics API
+  version: 1.0.0
+  description: API documentation for Everfit Metrics
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/metrics:
+    post:
+      summary: Create a new metric
+      parameters:
+        - in: header
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 1000
+                unit:
+                  type: string
+                  enum: [METER, CENTIMETER, INCH, FEET, YARD, CELSIUS, FAHRENHEIT, KELVIN]
+                  example: METER
+                date:
+                  type: string
+                  format: date-time
+                  example: "2025-10-01T08:00:00Z"
+      responses:
+        '201':
+          description: Metric created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric'
+    get:
+      summary: Get aggregated metrics
+      parameters:
+        - in: header
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [DISTANCE, TEMPERATURE]
+          required: true
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: unit
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: maxDataPoints
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Aggregated metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AggregatedMetricsResponse'
+components:
+  schemas:
+    Metric:
+      type: object
+      properties:
+        userId:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+        unit:
+          type: string
+        date:
+          type: string
+          format: date-time
+    AggregatedMetricsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              startBucket:
+                type: string
+                format: date-time
+              count:
+                type: integer
+              totalAvgValue:
+                type: number
+              max:
+                type: number
+              min:
+                type: number
+        meta:
+          type: object
+          properties:
+            unit:
+              type: string
+            type:
+              type: string
+            totalRecords:
+              type: integer
+            returnedPoints:
+              type: integer
+            bucketSize:
+              type: integer
+            maxDataPoints:
+              type: integer

@@ -1,212 +1,45 @@
-## Tech Stack
+## API Documentation
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB
-- **ODM**: Mongoose
-- **Validation**: Joi
-- **Logging**: Morgan
-
-## Project Structure
+You can view and try the API online using Swagger UI at:
 
 ```
-everfit-test/
-├── src/
-│   ├── config/
-│   │   ├── config.js           # Application configuration
-│   │   └── database.js         # Database connection
-│   ├── middlewares/
-│   │   ├── errorHandler.js     # Global error handler
-│   │   └── notFound.js         # 404 handler
-│   ├── modules/
-│   │   └── metrics/
-│   │       ├── metrics.model.js      # Mongoose model
-│   │       ├── metrics.service.js    # Business logic
-│   │       ├── metrics.controller.js # Request handlers
-│   │       ├── metrics.routes.js     # Route definitions
-│   │       └── metrics.validator.js  # Input validation
-│   ├── utils/
-│   │   └── responseHandler.js  # Response utilities
-│   └── index.js                # Application entry point
-├── .gitignore
-├── package.json
-└── README.md
+http://localhost:3000/api-docs
 ```
 
-## Installation
+This documentation is generated from `docs/swagger.yaml` and includes all available endpoints, parameters, and response formats.
+## Everfit Test Project
 
-1. Clone the repository:
+### Setup & Usage
+
+
+#### 1. Prepare environment variables
+
+Copy the example environment file and adjust values if needed:
+
 ```bash
-git clone <repository-url>
-cd everfit-test
+copy .env.example .env
 ```
 
-2. Install dependencies:
+#### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/everfit-test
-NODE_ENV=development
-```
+#### 3. Run development server
 
-4. Make sure MongoDB is running on your system.
-
-## Running the Application
-
-### Development mode (with auto-reload):
 ```bash
 npm run dev
 ```
 
-### Production mode:
+#### 4. Seed sample data
+
+You can seed sample data for metrics using one of the provided scripts:
+
 ```bash
-npm start
+node scripts/seed.js
 ```
 
-The server will start on `http://localhost:3000`
+### API Design Idea
 
-## API Endpoints
-
-### Health Check
-- `GET /` - API health check
-
-### Metrics Module
-
-#### Create a Metric
-- **POST** `/api/metrics`
-- **Headers**:
-  - `user-id`: User identifier (required)
-- **Body**:
-```json
-{
-  "date": "2024-01-15T10:30:00Z",
-  "value": 1500,
-  "unit": "meter"
-}
-```
-
-Or for Temperature:
-```json
-{
-  "date": "2024-01-15T14:30:00Z",
-  "value": 25.5,
-  "unit": "celsius"
-}
-```
-
-**Note:** 
-- `userId` is passed in the **header** as `user-id`
-- `date` is **required** in ISO 8601 format
-- The `type` field is automatically determined by the backend based on the `unit`
-- Unit is case-insensitive (will be converted to uppercase)
-
-## Metrics Schema
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| userId | String | Yes | User identifier (from header) |
-| date | Date | Yes | Measurement date (ISO 8601 format) |
-| value | Number | Yes | Metric value |
-| type | String | Auto | Metric type: DISTANCE or TEMPERATURE (determined by BE) |
-| unit | String | Yes | Unit of measurement (case-insensitive) |
-| createdAt | Date | Auto | Creation timestamp |
-| updatedAt | Date | Auto | Last update timestamp |
-
-### Available Units (Type Auto-Determined)
-
-**Distance Units:**
-- METER
-- CENTIMETER
-- INCH
-- FEET
-- YARD
-
-**Temperature Units:**
-- CELSIUS
-- FAHRENHEIT
-- KELVIN
-
-## Response Format
-
-### Success Response
-```json
-{
-  "success": true,
-  "data": { ... },
-  "message": "Operation successful"
-}
-```
-
-### Error Response
-```json
-{
-  "success": false,
-  "error": "Error message",
-  "stack": "Stack trace (only in development)"
-}
-```
-
-### Paginated Response
-```json
-{
-  "success": true,
-  "data": [ ... ],
-  "pagination": {
-    "total": 100,
-    "page": 1,
-    "limit": 10,
-    "pages": 10
-  }
-}
-```
-
-## Error Handling
-
-The API uses a centralized error handling middleware that catches and formats errors consistently:
-- 400: Bad Request (validation errors)
-- 404: Not Found
-- 500: Internal Server Error
-
-## Development
-
-### Adding a New Module
-
-1. Create a new folder in `src/modules/`
-2. Create the following files:
-   - `<module>.model.js` - Mongoose schema
-   - `<module>.service.js` - Business logic
-   - `<module>.controller.js` - Request handlers
-   - `<module>.routes.js` - Route definitions
-   - `<module>.validator.js` - Input validation
-3. Import routes in `src/index.js`
-
-### Code Organization
-
-- **Models**: Define database schemas and models
-- **Services**: Contain business logic and database operations
-- **Controllers**: Handle HTTP requests/responses
-- **Routes**: Define API endpoints
-- **Validators**: Validate input data
-- **Middlewares**: Process requests before reaching controllers
-- **Utils**: Reusable utility functions
-
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| PORT | Server port | 3000 |
-| MONGODB_URI | MongoDB connection string | mongodb://localhost:27017/everfit-test |
-| NODE_ENV | Environment mode | development |
-
-## License
-
-ISC
-
-## Author
-
-Your Name
-
+The GET /api/metrics endpoint is designed to group and aggregate metric data into buckets based on time ranges. This approach ensures that the client receives a reasonable and manageable amount of data points, making it efficient for chart rendering and visualization. The bucket size and maximum data points can be controlled via query parameters, allowing flexible chart resolutions for different use cases.

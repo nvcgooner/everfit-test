@@ -1,3 +1,4 @@
+const setupSwagger = require('./swagger');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/metrics', metricsRoutes);
+setupSwagger(app);
 
 app.use(errorHandler);
 

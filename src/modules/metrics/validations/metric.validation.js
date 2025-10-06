@@ -23,11 +23,11 @@ const createMetricSchema = createJoiSchema({
 
 const getMetricsSchema = createJoiSchema({
   type: field(
-    Joi.string().valid(...Object.values(METRIC_TYPES)).optional()
+    Joi.string().valid(...Object.values(METRIC_TYPES)).required()
   ),
 
   unit: field(
-    Joi.string().valid(...validUnits).optional()
+    Joi.string().valid(...validUnits).required()
   ),
 
   startDate: field(
