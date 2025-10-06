@@ -42,8 +42,6 @@ class MetricsRepository {
                 date: "$date"
               }
             },
-            startBucket: { $min: "$date" },
-            endBucket: { $max: "$date" },
             type: { $first: "$type" },
           }
         }
@@ -58,18 +56,14 @@ class MetricsRepository {
           sum: { $sum: "$records.value" },
           count: { $sum: 1 },
           type: { $first: "$type" },
-          startBucket: { $first: "$startBucket" },
-          endBucket: { $first: "$endBucket" },
-            max: { $max: "$records.value" },
-            min: { $min: "$records.value" },
+          max: { $max: "$records.value" },
+          min: { $min: "$records.value" },
         }
       },
       {
         $group: {
           _id: "$_id.bucketId",
           type: { $first: "$type" },
-          startBucket: { $first: "$startBucket" },
-          endBucket: { $first: "$endBucket" },
           count: { $sum: "$count" },
           unitSummaries: {
             $push: {
@@ -85,8 +79,7 @@ class MetricsRepository {
       {
         $project: {
           _id: 0,
-          startBucket: "$startBucket",
-          endBucket: '$endBucket',
+          startBucket: "$_id",
           type: 1,
           count: 1,
           unitSummaries: 1,

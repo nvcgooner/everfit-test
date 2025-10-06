@@ -56,7 +56,6 @@ class MetricsService {
 
         return {
           startBucket: bucket.startBucket,
-          endBucket: bucket.endBucket,
           count: bucket.count,
           totalAvgValue: totalSum / totalCount,
           max: bucketMax,
