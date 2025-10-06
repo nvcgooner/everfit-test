@@ -1,8 +1,5 @@
-const { METRIC_TYPES, DISTANCE_UNITS, TEMPERATURE_UNITS } = require('../../../shared/enums/metric.enum');
+const { METRIC_TYPES, DISTANCE_UNITS, TEMPERATURE_UNITS } = require('../../../../shared/enums/metric.enum');
 
-/**
- * Determine metric type based on unit
- */
 const determineType = (unit) => {
   if (!unit) return null;
 
@@ -17,11 +14,6 @@ const determineType = (unit) => {
   return null;
 };
 
-/**
- * Transform request to model data for creating metric
- * @param {Object} req - Express request object
- * @returns {Object} Model data ready for database
- */
 const createMetricDto = (req) => {
   const { date, value, unit } = req.body;
   const userId = req.userId;

@@ -177,3 +177,54 @@ user-id: user123
   "unit": "invalid_unit"
 }
 
+###############################################
+### GET METRICS API TESTS
+###############################################
+
+### Get All Metrics (with required date range)
+GET {{baseUrl}}/api/metrics?startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Get Metrics - Filter by Type (DISTANCE)
+GET {{baseUrl}}/api/metrics?type=DISTANCE&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Get Metrics - Filter by Type (TEMPERATURE)
+GET {{baseUrl}}/api/metrics?type=TEMPERATURE&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user456
+
+### Get Metrics - With Unit Conversion (to FEET)
+GET {{baseUrl}}/api/metrics?unit=FEET&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Get Metrics - With Unit Conversion (to FAHRENHEIT)
+GET {{baseUrl}}/api/metrics?unit=FAHRENHEIT&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user456
+
+### Get Metrics - All Filters + Unit Conversion
+GET {{baseUrl}}/api/metrics?type=DISTANCE&unit=METER&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Get Metrics - Specific Date Range
+GET {{baseUrl}}/api/metrics?startDate=2024-01-15T00:00:00Z&endDate=2024-01-15T23:59:59Z
+user-id: user123
+
+### Test Missing startDate (should fail)
+GET {{baseUrl}}/api/metrics?endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Test Missing endDate (should fail)
+GET {{baseUrl}}/api/metrics?startDate=2024-01-01T00:00:00Z
+user-id: user123
+
+### Test Missing user-id header (should fail)
+GET {{baseUrl}}/api/metrics?startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+
+### Test Invalid Type (should fail)
+GET {{baseUrl}}/api/metrics?type=INVALID&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+
+### Test Invalid Unit (should fail)
+GET {{baseUrl}}/api/metrics?unit=INVALID_UNIT&startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z
+user-id: user123
+

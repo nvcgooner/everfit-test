@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { DISTANCE_UNITS, TEMPERATURE_UNITS } = require('../../../shared/enums/metric.enum');
+const { METRIC_TYPES, DISTANCE_UNITS, TEMPERATURE_UNITS } = require('../../../shared/enums/metric.enum');
 const { createJoiSchema, field } = require('../../../shared/utils/joiHelpers');
 
 const validUnits = [
@@ -21,7 +21,26 @@ const createMetricSchema = createJoiSchema({
   ),
 });
 
+const getMetricsSchema = createJoiSchema({
+  type: field(
+    Joi.string().valid(...Object.values(METRIC_TYPES)).required()
+  ),
+
+  unit: field(
+    Joi.string().valid(...validUnits).required()
+  ),
+
+  startDate: field(
+    Joi.date().iso().required()
+  ),
+
+  endDate: field(
+    Joi.date().iso().required()
+  ),
+});
+
 module.exports = {
   createMetricSchema,
+  getMetricsSchema,
 };
 

@@ -1,6 +1,6 @@
 const BaseRouter = require('../../shared/base/baseRouter');
-const { validateUserId, validateRequest } = require('../../shared/middlewares');
-const { createMetricSchema } = require('./validations/metric.validation');
+const { validateUserId, validateRequest, validateQuery } = require('../../shared/middlewares');
+const { createMetricSchema, getMetricsSchema } = require('./validations/metric.validation');
 const metricsController = require('./metrics.controller');
 
 const baseRouter = new BaseRouter();
@@ -12,6 +12,15 @@ baseRouter.post(
     validateRequest(createMetricSchema),
   ],
   metricsController.createMetric.bind(metricsController)
+);
+
+baseRouter.get(
+  '/',
+  [
+    validateUserId,
+    validateQuery(getMetricsSchema),
+  ],
+  metricsController.getMetrics.bind(metricsController)
 );
 
 module.exports = baseRouter.getRouter();
