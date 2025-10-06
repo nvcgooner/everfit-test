@@ -55,3 +55,5 @@ node scripts/seed.api.js
 ### API Design Idea
 
 The GET /api/metrics endpoint is designed to group and aggregate metric data into buckets based on time ranges. This approach ensures that the client receives a reasonable and manageable amount of data points, making it efficient for chart rendering and visualization. The bucket size and maximum data points can be controlled via query parameters, allowing flexible chart resolutions for different use cases.
+#### Missing Features: can be added but skipped due to time constraint
+- Can be further optimized by applying MongoDB Time Series collections for more efficient time series data storage and querying
