@@ -32,12 +32,24 @@ npm install
 npm run dev
 ```
 
-#### 4. Seed sample data
+#### 4. Running Unit Tests
+
+To run all unit tests (using Jest):
+
+```bash
+npm test
+```
+
+#### 5. Seed sample data
 
 You can seed sample data for metrics using one of the provided scripts:
 
 ```bash
 node scripts/seed.js
+```
+or
+```bash
+node scripts/seed.api.js
 ```
 
 ### API Design Idea
