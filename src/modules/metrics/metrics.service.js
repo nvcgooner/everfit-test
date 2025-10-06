@@ -1,7 +1,7 @@
 const metricsRepository = require('./metrics.repository');
 const { convertDistance, convertTemperature } = require('../../shared/utils/unitConverter');
-const { calculateBucketBoundaries, getHumanReadableBucketSize, calculateBucketSize } = require('../../shared/utils/bucketHelper');
-const { DISTANCE_UNITS, TEMPERATURE_UNITS } = require('../../shared/enums/metric.enum');
+const { calculateBucketBoundaries, calculateBucketSize } = require('../../shared/utils/bucketHelper');
+const { DISTANCE_UNITS, TEMPERATURE_UNITS, METRIC_TYPES } = require('../../shared/enums/metric.enum');
 const config = require('../../config/config');
 
 class MetricsService {
@@ -11,6 +11,15 @@ class MetricsService {
   }
 
   async getMetrics(filters, targetUnit, maxDataPoints = null) {
+    if (filters.type === METRIC_TYPES.DISTANCE && !Object.values(DISTANCE_UNITS).includes(targetUnit)) {
+      throw new Error('unit invalid for distance type');
+    }
+
+    if (filters.type === METRIC_TYPES.TEMPERATURE && !Object.values(TEMPERATURE_UNITS).includes(targetUnit)) {
+      throw new Error('unit invalid for temperature type');
+    }
+
+
     const maxPoints = maxDataPoints || config.maxDataPoints;
     
     const bucketBoundaries = calculateBucketBoundaries(
