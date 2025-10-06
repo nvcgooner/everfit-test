@@ -1,6 +1,6 @@
 const metricsRepository = require('./metrics.repository');
 const { convertDistance, convertTemperature } = require('../../shared/utils/unitConverter');
-const { calculateBucketBoundaries, calculateBucketSize } = require('../../shared/utils/bucketHelper');
+const { calculateBucketBoundaries } = require('../../shared/utils/bucketHelper');
 const { DISTANCE_UNITS, TEMPERATURE_UNITS, METRIC_TYPES } = require('../../shared/enums/metric.enum');
 const config = require('../../config/config');
 
@@ -11,18 +11,20 @@ class MetricsService {
   }
 
   async getMetrics(filters, targetUnit, maxDataPoints = null) {
-    if (filters.type === METRIC_TYPES.DISTANCE && !Object.values(DISTANCE_UNITS).includes(targetUnit)) {
+    const { type } = filters;
+
+    if (type === METRIC_TYPES.DISTANCE && !Object.values(DISTANCE_UNITS).includes(targetUnit)) {
       throw new Error('unit invalid for distance type');
     }
 
-    if (filters.type === METRIC_TYPES.TEMPERATURE && !Object.values(TEMPERATURE_UNITS).includes(targetUnit)) {
+    if (type === METRIC_TYPES.TEMPERATURE && !Object.values(TEMPERATURE_UNITS).includes(targetUnit)) {
       throw new Error('unit invalid for temperature type');
     }
 
 
     const maxPoints = maxDataPoints || config.maxDataPoints;
     
-    const bucketBoundaries = calculateBucketBoundaries(
+    const { bucketBoundaries, bucketSize } = calculateBucketBoundaries(
       filters.startDate,
       filters.endDate,
       maxPoints
@@ -71,18 +73,16 @@ class MetricsService {
           min: bucketMin,
         };
       });
-    
-    const bucketSizeMs = calculateBucketSize(filters.startDate, filters.endDate, maxPoints);
     const totalCount = processedData.reduce((acc, bucket) => acc + bucket.count, 0);
     
     return {
       data: processedData,
       meta: {
+        bucketSize,
         unit: targetUnit,
         type: filters.type,
         totalRecords: totalCount,
         returnedPoints: processedData.length,
-        bucketSize: bucketSizeMs,
         maxDataPoints: maxPoints,
       }
     };

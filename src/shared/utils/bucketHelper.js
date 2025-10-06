@@ -2,25 +2,18 @@ const calculateBucketBoundaries = (startDate, endDate, maxDataPoints) => {
   const start = new Date(startDate).getTime();
   const end = new Date(endDate).getTime();
   const totalDuration = end - start + 1;
-  const bucketSize = totalDuration / maxDataPoints;
+  const safeMaxDataPoints = totalDuration < maxDataPoints ? totalDuration : maxDataPoints;
+  const bucketSize = totalDuration / safeMaxDataPoints;
 
-  const boundaries = [];
-  for (let i = 0; i <= maxDataPoints; i++) {
-    boundaries.push(new Date(start + (bucketSize * i)));
+  const bucketBoundaries = [];
+  for (let i = 0; i <= safeMaxDataPoints; i++) {
+    bucketBoundaries.push(new Date(start + (bucketSize * i)));
   }
 
-  return boundaries;
-};
-
-const calculateBucketSize = (startDate, endDate, maxDataPoints) => {
-  const start = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-  const totalDuration = end - start;
-  return totalDuration / maxDataPoints;
+  return { bucketBoundaries, bucketSize };
 };
 
 module.exports = {
   calculateBucketBoundaries,
-  calculateBucketSize,
 };
 
