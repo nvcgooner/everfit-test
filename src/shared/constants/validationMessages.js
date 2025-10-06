@@ -1,13 +1,7 @@
-/**
- * Common validation messages for reuse across the application
- */
-
 const validationMessages = {
-  // Common messages
   required: (field) => `${field} is required`,
   invalid: (field) => `${field} is invalid`,
-  
-  // Type-specific messages
+
   string: {
     base: (field) => `${field} must be a string`,
     empty: (field) => `${field} cannot be empty`,
@@ -45,8 +39,7 @@ const validationMessages = {
   enum: {
     only: (field, values) => `${field} must be one of: ${values.join(', ')}`,
   },
-  
-  // Custom field messages
+
   fields: {
     date: {
       base: 'Date must be a valid date',
@@ -69,9 +62,6 @@ const validationMessages = {
   },
 };
 
-/**
- * Generate Joi messages object from field name
- */
 const generateJoiMessages = (field, type, customMessages = {}) => {
   const baseMessages = {
     'any.required': validationMessages.required(field),

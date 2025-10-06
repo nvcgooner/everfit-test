@@ -1,6 +1,3 @@
-/**
- * Export all shared middlewares
- */
 const { validateUserId } = require('./validateHeaders');
 const validateRequest = require('./validateRequest');
 const validateQuery = require('./validateQuery');

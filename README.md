@@ -1,19 +1,3 @@
-# Everfit Test - Node.js Express MongoDB API
-
-A modular Node.js REST API built with Express and MongoDB, featuring a comprehensive Metrics module.
-
-## Features
-
-- 🏗️ Modular architecture for better code organization
-- 🚀 RESTful API endpoints
-- 🗄️ MongoDB integration with Mongoose
-- ✅ Input validation using Joi
-- 🔍 Base Router with automatic validation
-- 📊 Metrics module with DTO pattern
-- 🛡️ Error handling middleware
-- 📝 Request logging with Morgan
-- 🎯 Header validation for authentication
-
 ## Tech Stack
 
 - **Runtime**: Node.js

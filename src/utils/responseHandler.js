@@ -1,7 +1,3 @@
-/**
- * Utility functions for standardized API responses
- */
-
 class ResponseHandler {
   static success(res, data, message = 'Success', statusCode = 200) {
     return res.status(statusCode).json({

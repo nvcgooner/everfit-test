@@ -1,8 +1,5 @@
 const Joi = require('joi');
 
-/**
- * Auto-generate validation messages based on field name and validation rules
- */
 const createJoiSchema = (schemaDefinition) => {
   const schema = {};
 
@@ -10,7 +7,6 @@ const createJoiSchema = (schemaDefinition) => {
     const fieldDef = schemaDefinition[fieldName];
     let field = fieldDef.validator;
 
-    // Auto-generate messages based on field name and validator type
     const messages = generateMessages(fieldName, fieldDef);
     
     if (Object.keys(messages).length > 0) {
@@ -23,30 +19,23 @@ const createJoiSchema = (schemaDefinition) => {
   return Joi.object(schema);
 };
 
-/**
- * Generate messages for a field based on validation rules
- */
 const generateMessages = (fieldName, fieldDef) => {
   const messages = {};
   const capitalizedField = capitalize(fieldName);
   const validator = fieldDef.validator;
 
-  // Get validation type
   const type = validator.type;
 
-  // Common messages
   if (fieldDef.required !== false) {
     messages['any.required'] = `${capitalizedField} is required`;
   }
   messages['any.invalid'] = `${capitalizedField} is invalid`;
 
-  // Type-specific messages
   switch (type) {
     case 'string':
       messages['string.base'] = `${capitalizedField} must be a string`;
       messages['string.empty'] = `${capitalizedField} cannot be empty`;
-      
-      // Check for specific validations
+
       if (validator._rules) {
         validator._rules.forEach(rule => {
           if (rule.name === 'min') {
@@ -97,7 +86,6 @@ const generateMessages = (fieldName, fieldDef) => {
       break;
   }
 
-  // Handle .valid() for enums
   if (validator._valids && validator._valids._values.size > 0) {
     const values = Array.from(validator._valids._values).filter(v => v !== null);
     if (values.length > 0) {
@@ -105,7 +93,6 @@ const generateMessages = (fieldName, fieldDef) => {
     }
   }
 
-  // Custom messages override
   if (fieldDef.messages) {
     Object.assign(messages, fieldDef.messages);
   }
@@ -113,16 +100,10 @@ const generateMessages = (fieldName, fieldDef) => {
   return messages;
 };
 
-/**
- * Capitalize first letter
- */
 const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-/**
- * Helper to create field definition
- */
 const field = (validator, options = {}) => {
   return {
     validator,

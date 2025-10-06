@@ -18,12 +18,12 @@ class MetricsController extends BaseController {
 
   async getMetrics(req, res, next) {
     try {
-      const { unit } = req.query;
+      const { unit, maxDataPoints } = req.query;
       const filters = getMetricsDto(req);
 
-      const metrics = await metricsService.getMetrics(filters, unit);
+      const result = await metricsService.getMetrics(filters, unit, maxDataPoints);
 
-      return this.sendSuccess(res, metrics);
+      return this.sendSuccess(res, result.data, result.meta);
     } catch (error) {
       next(error);
     }

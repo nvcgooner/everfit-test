@@ -1,8 +1,6 @@
-/**
- * Export all utility functions
- */
 const { createJoiSchema, generateMessages, field } = require('./joiHelpers');
 const { convertDistance, convertTemperature, convertMetricUnit } = require('./unitConverter');
+const { calculateBucketBoundaries, calculateBucketSize, getHumanReadableBucketSize } = require('./bucketHelper');
 
 module.exports = {
   createJoiSchema,
@@ -11,5 +9,8 @@ module.exports = {
   convertDistance,
   convertTemperature,
   convertMetricUnit,
+  calculateBucketBoundaries,
+  calculateBucketSize,
+  getHumanReadableBucketSize,
 };
 

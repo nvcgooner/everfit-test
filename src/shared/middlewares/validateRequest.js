@@ -1,11 +1,8 @@
-/**
- * Joi Validation Middleware
- */
 const validateRequest = (schema) => {
   return (req, res, next) => {
     const { error, value } = schema.validate(req.body, {
-      abortEarly: false, // Return all errors, not just the first one
-      stripUnknown: true, // Remove unknown fields
+      abortEarly: false,
+      stripUnknown: true,
     });
 
     if (error) {
@@ -20,7 +17,6 @@ const validateRequest = (schema) => {
       });
     }
 
-    // Replace req.body with validated and sanitized value
     req.body = value;
     next();
   };
